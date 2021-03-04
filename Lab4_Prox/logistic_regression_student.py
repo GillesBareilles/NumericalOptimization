@@ -2,16 +2,12 @@
 # coding: utf-8
 
 # # Regularized Problem
-# 
+#
 # In this lab, we add an $\ell_1$ regularization to promote sparsity of the iterates. The function (below) is non-smooth but it has a smooth part, $f$, and a non-smooth part, $g$, that we will treat with proximal operations.
-# 
+#
 # \begin{align*}
 # \min_{x\in\mathbb{R}^d } F(x) := \underbrace{ \frac{1}{m}  \sum_{i=1}^m  \log( 1+\exp(-b_i \langle a_i,x \rangle) ) + \frac{\lambda_2}{2} \|x\|_2^2}_{f(x)} + \underbrace{\lambda_1 \|x\|_1 }_{g(x)}.
 # \end{align*}
-
-# ### Function definition 
-
-
 
 import numpy as np
 import csv
@@ -40,66 +36,60 @@ for i in range(m_test):
         b_test[i] = -1.0
 
 
-L = 0.25*max(np.linalg.norm(A,2,axis=1))**2 + lam2
-
-
-d = 27 # features
-n = d+1 # with the intercept
-
-
+d = 27      # features
+n = d+1     # with the intercept
 
 lam1 = 0.03 # for the 1-norm regularization best:0.03
 lam2 = 0.0
 
+L = 0.25*max(np.linalg.norm(A,2,axis=1))**2 + lam2  # Lipschitz constant of gradient of f
 
 
-# ## Oracles
-# 
-# ### Related to function $f$ 
-
-
+## Oracles
+### Related to function f
 def f(x):
     l = 0.0
     for i in range(A.shape[0]):
         if b[i] > 0 :
-            l += np.log( 1 + np.exp(-np.dot( A[i] , x ) ) ) 
+            l += np.log( 1 + np.exp(-np.dot( A[i] , x ) ) )
         else:
-            l += np.log( 1 + np.exp(np.dot( A[i] , x ) ) ) 
+            l += np.log( 1 + np.exp(np.dot( A[i] , x ) ) )
     return l/m + lam2/2.0*np.dot(x,x)
 
 def f_grad(x):
     g = np.zeros(n)
     for i in range(A.shape[0]):
         if b[i] > 0:
-            g += -A[i]/( 1 + np.exp(np.dot( A[i] , x ) ) ) 
+            g += -A[i]/( 1 + np.exp(np.dot( A[i] , x ) ) )
         else:
-            g += A[i]/( 1 + np.exp(-np.dot( A[i] , x ) ) ) 
+            g += A[i]/( 1 + np.exp(-np.dot( A[i] , x ) ) )
     return g/m + lam2*x
 
+### Related to function g
+def g(x, lambda_1=lam1):
+    return lambda_1*np.linalg.norm(x,1)
 
-# ### Related to function $g$ [TODO]
-
-
-def g(x):
-    return lam1*np.linalg.norm(x,1)
-
-def g_prox(x,gamma):
+def g_prox(x,gamma, lambda_1=lam1):
     p = np.zeros(n)
-#TODO
+
+    #
+    #
+    #
+    # TODO, task 1.
+    #
+    #
+    #
+
     return p
 
 
-# ### Related to function $F$
-
-
-
+### Related to function F
 def F(x):
     return f(x) + g(x)
 
 
-# ## Prediction Functions
 
-
+## Prediction Functions
 def prediction_train(w,PRINT=False):
     pred = np.zeros(A.shape[0])
     perf = 0
