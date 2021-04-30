@@ -1,40 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Logistic Regression Problem
-# 
-# 
-# 
-# ### Machine Learning as an Optimization problem
-# 
-# We have some *data*  $\mathcal{D}$ consisting of $m$ *examples* $\{d_i\}$; each example consisting of a *feature* vector $a_i\in\mathbb{R}^d$ and an *observation* $b_i\in \mathcal{O}$: $\mathcal{D} = \{[a_i,b_i]\}_{i=1..m}$. In this lab, we will consider the <a href="http://archive.ics.uci.edu/ml/datasets/Student+Performance">student performance</a> dataset.
-# 
-# 
-# The goal of *supervised learning* is to construct a predictor for the observations when given feature vectors.
-# 
-# 
-# A popular approach is based on *linear models* which are based on finding a *parameter* $x$ such that the real number $\langle a_i , x \rangle$ is used to predict the value of the observation through a *predictor function* $g:\mathbb{R}\to \mathcal{O}$: $g(\langle a_i , x \rangle)$ is the predicted value from $a_i$.
-# 
-# 
-# In order to find such a parameter, we use the available data and a *loss* $\ell$ that penalizes the error made between the predicted $g(\langle a_i , x \rangle)$ and observed $b_i$ values. For each example $i$, the corresponding error function for a parameter $x$ is $f_i(x) =   \ell( g(\langle a_i , x \rangle) ; b_i )$. Using the whole data, the parameter that minimizes the total error is the solution of the minimization problem
-# $$ \min_{x\in\mathbb{R}^d}  \frac{1}{m} \sum_{i=1}^m f_i(x) = \frac{1}{m} \sum_{i=1}^m  \ell( g(\langle a_i , x \rangle) ; b_i ). $$
-# 
-# 
-# 
-# # Regularized Problem 
-# 
-# In this lab, we will consider an $\ell_1$ regularization to promote sparsity of the iterates. A sparse final solution would select the most important features. The new function (below) is non-smooth but it has a smooth part, $f$, the same as in Lab3; and a non-smooth part, $g$, that we will treat with proximal operations.
-# 
-# \begin{align*}
-# \min_{x\in\mathbb{R}^d } F(x) := \underbrace{ \frac{1}{m}  \sum_{i=1}^m  \log( 1+\exp(-b_i \langle a_i,x \rangle) ) + \frac{\lambda_2}{2} \|x\|_2^2}_{f(x)} + \underbrace{\lambda_1 \|x\|_1 }_{g(x)}.
-# \end{align*}
-# 
-# 
-
-
-# ### Function definition 
-
-
+# Logistic Regression Problem
 
 import numpy as np
 import csv
@@ -63,86 +30,74 @@ for i in range(m_test):
         b_test[i] = -1.0
 
 
-d = 27 # features
-n = d+1 # with the intercept
+d = 27      # features
+n = d+1     # with the intercept
 
-
-
-
-lam2 = 0.1 # for the 2-norm regularization best:0.1
-lam1 = 0.03 # for the 1-norm regularization best:0.03
-
+lam2 = 0.1      # for the 2-norm regularization best:0.1
+lam1 = 0.03     # for the 1-norm regularization best:0.03
 
 L = 0.25*max(np.linalg.norm(A,2,axis=1))**2 + lam2
 
 
-# ## Oracles
-# 
-# ### Related to function $f$
-
-
-
-def f(x):
+## Oracles
+### Related to function f
+def f(x, lambda2=lam2):
     l = 0.0
     for i in range(A.shape[0]):
         if b[i] > 0 :
-            l += np.log( 1 + np.exp(-np.dot( A[i] , x ) ) ) 
+            l += np.log( 1 + np.exp(-np.dot( A[i] , x ) ) )
         else:
-            l += np.log( 1 + np.exp(np.dot( A[i] , x ) ) ) 
-    return l/m + lam2/2.0*np.dot(x,x)
+            l += np.log( 1 + np.exp(np.dot( A[i] , x ) ) )
+    return l/m + lambda2/2.0*np.dot(x,x)
 
-def f_grad(x):
+def f_grad(x, lambda2=lam2):
     g = np.zeros(n)
     for i in range(A.shape[0]):
         if b[i] > 0:
-            g += -A[i]/( 1 + np.exp(np.dot( A[i] , x ) ) ) 
+            g += -A[i]/( 1 + np.exp(np.dot( A[i] , x ) ) )
         else:
-            g += A[i]/( 1 + np.exp(-np.dot( A[i] , x ) ) ) 
-    return g/m + lam2*x
+            g += A[i]/( 1 + np.exp(-np.dot( A[i] , x ) ) )
+    return g/m + lambda2*x
 
+## Related to function f_i (one example)
+def f_ex(x, i, lambda2=lam2):
 
-# ## Related to function $f_i$ (one example)
+    #
+    #### TODO: task 1
+    #
+    return 0.0
 
-# Q. To Fill
-
-
-
-def f_grad_ex(x,i):
+def f_grad_ex(x, i, lambda2=lam2):
     g = np.zeros(n)
-    
-    #### TODO
-    
+
+    #
+    #### TODO: task 1
+    #
+
     return g
 
 
-# ### Related to function $g$
-
-
-def g(x):
+### Related to function g
+def g(x, lambda1=lam1):
     return lam1*np.linalg.norm(x,1)
 
-def g_prox(x,gamma):
+def g_prox(x, gamma, lambda1=lam1):
     p = np.zeros(n)
     for i in range(n):
-        if x[i] < - lam1*gamma:
-            p[i] = x[i] + lam1*gamma
-        if x[i] > lam1*gamma:
-            p[i] = x[i] - lam1*gamma
+        if x[i] < - lambda1*gamma:
+            p[i] = x[i] + lambda1*gamma
+        if x[i] > lambda1*gamma:
+            p[i] = x[i] - lambda1*gamma
     return p
 
 
-# ### Related to function $F$
+### Related to function F
+def F(x, lambda1=lam1, lambda2=lam2):
+    return f(x, lambda2=lambda2) + g(x, lambda1=lambda1)
 
 
 
-def F(x):
-    return f(x) + g(x)
-
-
-# ## Prediction Function
-
-
-
+## Prediction Function
 def prediction_train(w,PRINT):
     pred = np.zeros(A.shape[0])
     perf = 0
