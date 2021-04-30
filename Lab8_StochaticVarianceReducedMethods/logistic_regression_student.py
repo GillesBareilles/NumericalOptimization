@@ -76,7 +76,6 @@ def f_grad_ex(x, i, lambda2=lam2):
 
     return g
 
-
 ### Related to function g
 def g(x, lambda1=lam1):
     return lam1*np.linalg.norm(x,1)
