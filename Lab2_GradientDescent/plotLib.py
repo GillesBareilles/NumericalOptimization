@@ -15,7 +15,7 @@ def custom_3dplot( f, x1_min,x1_max,x2_min,x2_max,nb_points, v_min, v_max ):
 	x , y = np.meshgrid(np.linspace(x1_min,x1_max,nb_points),np.linspace(x2_min,x2_max,nb_points))
 	z = f_no_vector(x,y)
 
-	fig = plt.figure()
+	fig = plt.figure(figsize = (6, 6))
 	ax = fig.gca(projection='3d')
 	ax.plot_surface(x, y, z,   cmap=cm.hot , vmin = v_min, vmax =  v_max)
 	ax.set_zlim(v_min, v_max)
@@ -30,8 +30,8 @@ def level_plot( f, x1_min,x1_max,x2_min,x2_max,nb_points, levels , title ):
 
 	x , y = np.meshgrid(np.linspace(x1_min,x1_max,nb_points),np.linspace(x2_min,x2_max,nb_points))
 	z = f_no_vector(x,y)
-	
-	fig = plt.figure()
+
+	fig = plt.figure(figsize = (6, 6))
 	graphe = plt.contour(x,y,z,levels)
 	#plt.plot(3,1,'r*',markersize=15)
 	plt.clabel(graphe,  inline=1, fontsize=10,fmt='%3.2f')
@@ -47,21 +47,21 @@ def level_points_plot( f , x_tab , x1_min,x1_max,x2_min,x2_max,nb_points, levels
 	x , y = np.meshgrid(np.linspace(x1_min,x1_max,nb_points),np.linspace(x2_min,x2_max,nb_points))
 	z = f_no_vector(x,y)
 
-	fig = plt.figure()
+	fig = plt.figure(figsize = (6, 6))
 	graphe = plt.contour(x,y,z,levels)
 	#plt.plot(3,1,'r*',markersize=15)
 	plt.clabel(graphe,  inline=1, fontsize=10,fmt='%3.2f')
 	plt.title(title)
 
-	if x_tab.shape[0] > 40:
+		if x_tab.shape[0] > 40:
         	sub = int(x_tab.shape[0]/40.0)
         	x_tab = x_tab[::sub]
-        
+
 	delay = 2.0/x_tab.shape[0]
 	for k in range(x_tab.shape[0]):
 		plt.plot(x_tab[k,0],x_tab[k,1],'*b',markersize=10)
 		#plt.annotate(k,(x_tab[k,0],x_tab[k,1]))
-		plt.draw()	
+		plt.draw()
 		display.clear_output(wait=True)
 		display.display(fig)
 		time.sleep(delay)
@@ -78,7 +78,7 @@ def level_2points_plot( f , x_tab , x_tab2 , x1_min,x1_max,x2_min,x2_max,nb_poin
 	x , y = np.meshgrid(np.linspace(x1_min,x1_max,nb_points),np.linspace(x2_min,x2_max,nb_points))
 	z = f_no_vector(x,y)
 
-	fig = plt.figure()
+	fig = plt.figure(figsize = (6, 6))
 	graphe = plt.contour(x,y,z,levels)
 	#plt.plot(3,1,'r*',markersize=15)
 	plt.clabel(graphe,  inline=1, fontsize=10,fmt='%3.2f')
@@ -109,38 +109,3 @@ def level_2points_plot( f , x_tab , x_tab2 , x1_min,x1_max,x2_min,x2_max,nb_poin
 		plt.draw()
 
 	plt.show()
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
