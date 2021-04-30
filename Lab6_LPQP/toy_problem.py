@@ -4,11 +4,11 @@
 # # a Toy problem
 
 # We consider the first illustrative example of the original paper
-# 
-#     Candes, E., Tao, T. "The Dantzig selector: Statistical estimation when p is much larger than n". 
+#
+#     Candes, E., Tao, T. "The Dantzig selector: Statistical estimation when p is much larger than n".
 #     The Annals of Statistics, 2007
 
-# In this first example, the design matrix $X$ has $m = 72$ rows and $n = 256$ columns, with independent Gaussian entries (and then normalized so that the columns have unit-norm). We then select $\theta$ with $S := |\{i : \theta_i = 0\}| = 8$, and form $y = X\theta + \xi$, where the $\xi_i$’s are i.i.d. $\mathcal{N}(0, \sigma^2 )$. The noise level is adjusted so that 
+# In this first example, the design matrix $X$ has $m = 72$ rows and $n = 256$ columns, with independent Gaussian entries (and then normalized so that the columns have unit-norm). We then select $\theta$ with $S := |\{i : \theta_i = 0\}| = 8$, and form $y = X\theta + \xi$, where the $\xi_i$’s are i.i.d. $\mathcal{N}(0, \sigma^2 )$. The noise level is adjusted so that
 # $$ \sigma = \frac{1}{3} \sqrt{\frac{S}{n}} .$$
 
 # ### Problem
@@ -38,4 +38,3 @@ theta[non_null] = np.random.randn(S)
 
 # y creation
 y = np.dot(X,theta) + sigma*np.random.randn(m)
-
